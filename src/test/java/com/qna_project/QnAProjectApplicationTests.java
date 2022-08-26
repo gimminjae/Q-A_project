@@ -1,10 +1,13 @@
 package com.qna_project;
 
+import com.qna_project.answer.Answer;
+import com.qna_project.answer.AnswerRepository;
 import com.qna_project.question.Question;
 import com.qna_project.question.QuestionRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class QnAProjectApplicationTests {
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -93,6 +99,36 @@ class QnAProjectApplicationTests {
 
         assertThat(questionRepository.findAll().size()).isEqualTo(1);
     }
+    //답변 테스트
+    @Test
+    void testJpa_답변저장() {
+        Optional<Question> oq = this.questionRepository.findById(1L);
+        assertThat(oq.isPresent()).isEqualTo(true);
+        Question q = oq.get();
 
+        Answer a = new Answer();
+        a.setContent("answer1");
+        a.setQuestion(q);  // 어떤 질문의 답변인지 알기위해서 Question 객체가 필요하다.
+        a.setCreateDate(LocalDateTime.now());
+        this.answerRepository.save(a);
+    }
+    @Test
+    void testJpa_답변조회() {
+        Optional<Answer> oa = this.answerRepository.findById(1L);
+        assertThat(oa.isPresent()).isEqualTo(true);
+        Answer a = oa.get();
+        assertEquals(1, a.getQuestion().getId());
+    }
+    @Transactional
+    @Test
+    void testJpa_답변조회2() {
+        Optional<Question> oq = this.questionRepository.findById(1L);
+        assertThat(oq.isPresent()).isEqualTo(true);
+        Question q = oq.get();
 
+        List<Answer> answerList = q.getAnswerList();
+
+        assertEquals(1, answerList.size());
+        assertEquals("answer1", answerList.get(0).getContent());
+    }
 }
