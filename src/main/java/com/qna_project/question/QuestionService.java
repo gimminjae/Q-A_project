@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-@Service
 @RequiredArgsConstructor
+@Service
 public class QuestionService {
     private final QuestionRepository questionRepository;
 
