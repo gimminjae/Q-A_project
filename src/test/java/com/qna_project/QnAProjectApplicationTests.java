@@ -27,6 +27,17 @@ class QnAProjectApplicationTests {
     private QuestionRepository questionRepository;
 
     @Test
+    void testData() {
+        for(int i = 0; i < 100; i++) {
+            Question question = new Question();
+            question.setSubject("subject%d".formatted(i+1));
+            question.setContent("content%d".formatted(i+1));
+            question.setCreateDate(LocalDateTime.now());
+            questionRepository.save(question);
+        }
+    }
+
+    @Test
     void contextLoads() {
     }
 
