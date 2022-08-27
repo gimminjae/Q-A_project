@@ -7,4 +7,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
+    public void create(String username, String password1, String email) {
+    }
 }
